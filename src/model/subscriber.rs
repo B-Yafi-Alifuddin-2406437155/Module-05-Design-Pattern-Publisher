@@ -3,7 +3,7 @@ use rocket::log;
 use rocket::serde::json::to_string;
 use rocket::tokio;
 use bambangshop::REQWEST_CLIENT;
-use create::model::notification::Notification;
+use crate::model::notification::Notification;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
