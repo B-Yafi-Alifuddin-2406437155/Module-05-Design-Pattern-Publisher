@@ -77,6 +77,17 @@ This is the place for you to write reflections:
 ### Mandatory (Publisher) Reflections
 
 #### Reflection Publisher-1
+1. Question: In the Observer pattern diagram explained by the Head First Design Pattern book, Subscriber is defined as an interface. Explain based on your understanding of Observer design patterns, do we still need an interface (or trait in Rust) in this BambangShop case, or a single Model struct is enough?
+
+Answer: Pada diagram Observer di Head First, `Subscriber` dibuat sebagai interface agar berbagai tipe observer bisa diperlakukan seragam. Di BambangShop saat ini kita hanya punya satu jenis subscriber (endpoint HTTP dengan `url` dan `name`), jadi **struct model tunggal sudah cukup**. Trait baru jadi penting kalau nanti ada beberapa tipe subscriber dengan perilaku berbeda (misalnya webhook, email, log) sehingga kita butuh polymorphism dan kontrak `update()` yang sama.
+
+2. Question: id in Program and url in Subscriber is intended to be unique. Explain based on your understanding, is using Vec (list) sufficient or using DashMap (map/dictionary) like we currently use is necessary for this case?
+
+Answer: Karena `id` (Program) dan `url` (Subscriber) harus unik, **map/dictionary lebih tepat** daripada `Vec`. Dengan `Vec` kita harus scan manual untuk cek duplikat dan operasi hapus/ambil jadi O(n), rawan ada duplikasi kalau lupa validasi. Dengan `DashMap` (key = `id`/`url`) keunikan terjamin oleh key, lookup/insert/delete lebih efisien, dan sesuai kebutuhan repository sekarang (product_type -> url -> Subscriber).
+
+3. Question: When programming using Rust, we are enforced by rigorous compiler constraints to make a thread-safe program. In the case of the List of Subscribers (SUBSCRIBERS) static variable, we used the DashMap external library for thread safe HashMap. Explain based on your understanding of design patterns, do we still need DashMap or we can implement Singleton pattern instead?
+
+Answer: **Singleton dan thread-safety itu hal yang berbeda.** Singleton hanya memastikan satu instance global, tapi tidak otomatis membuat aksesnya aman di multi-thread. Jadi meskipun memakai Singleton, kita tetap butuh mekanisme sinkronisasi (misalnya `Mutex/RwLock` atau `DashMap`). Di kasus ini `DashMap` sudah memberikan thread-safe map, jadi tetap relevan; Singleton saja tidak cukup.
 
 #### Reflection Publisher-2
 
