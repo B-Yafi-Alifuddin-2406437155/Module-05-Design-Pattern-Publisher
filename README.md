@@ -103,3 +103,16 @@ This is the place for you to write reflections:
     Answer: Ya, Postman sangat membantu untuk menguji endpoint tanpa membuat UI. Saya bisa mengirim request (GET/POST/DELETE), lihat status code, body, dan header dengan cepat. Fitur yang paling berguna: Collections (organize endpoint), Environment Variables (ganti base URL/secret tanpa ubah request), dan Test Scripts (assert response otomatis). Ini relevan untuk proyek grup karena memudahkan kolaborasi dan regression testing sederhana.
 
 #### Reflection Publisher-3
+1. Question: Observer Pattern has two variations: Push model (publisher pushes data to subscribers) and Pull model (subscribers pull data from publisher). In this tutorial case, which variation of Observer Pattern that we use?
+
+   Answer: Pada tutorial ini menggunakan **Push model**. Publisher membuat `Notification` berisi data produk lalu **mengirim (push)** ke setiap subscriber melalui HTTP POST.
+
+2. Question: What are the advantages and disadvantages of using the other variation of Observer Pattern for this tutorial case? (example: if you answer Q1 with Push, then imagine if we used Pull)
+
+    Answer: Jika memakai **Pull model**, publisher hanya memberi sinyal bahwa ada perubahan, lalu subscriber harus meminta detail ke publisher.  
+    Kelebihan Pull: payload bisa lebih ringan, subscriber bisa memilih data yang dibutuhkan.  
+    Kekurangan Pull: butuh endpoint tambahan untuk di‑pull, menambah request (lebih banyak round‑trip), dan kompleksitas meningkat di sisi subscriber (harus tahu kapan dan bagaimana menarik data).
+
+3. Question: Explain what will happen to the program if we decide to not use multi-threading in the notification process.
+
+    Answer: Jika tidak memakai multi‑threading, proses notifikasi akan **jalan berurutan**. Dampaknya: request `create/delete/publish` akan menunggu semua pengiriman notifikasi selesai (lebih lambat), dan jika satu subscriber lambat/timeout, seluruh proses ikut tertunda. Namun implementasinya lebih sederhana dan lebih mudah di‑debug.
